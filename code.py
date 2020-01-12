@@ -2,13 +2,9 @@
 Load module to filter data on fly
 """
 from __future__ import print_function
-import os
-import sys
 import pandas as pd
-import numpy as np
 
-
-class Load(object):
+class Load():
     """
     Load class is used for exclusive dataframe filtering
     which takes `df` a csv file and convert into dataframe
@@ -28,7 +24,6 @@ class Load(object):
         """ Get current `version` of library"""
         return self.version
 
-
     def pick_numbers(self):
         """
 
@@ -46,10 +41,16 @@ class Load(object):
             >> [1,2,3,4,5,6]
 
         """
-        # complete code here
+        num = []
+        for i in self.data.split(","):
+            try:
+                num.append(float(i))
+            except ValueError:
+                pass
+        return num
 
-
-    def sum_all_numbers(self):
+    @classmethod
+    def sum_all_numbers(cls):
         """
         From `self.data` extract all numbers and return the sum of all numbers
 
@@ -66,8 +67,8 @@ class Load(object):
 
 
         """
-        # complete code here
-
+        num = df.pick_numbers()
+        return sum(num)
 
     def extract_vowels(self):
         """
@@ -81,9 +82,12 @@ class Load(object):
             >> df.extract_vowels()
             >> ['A', 'E', 'I', 'O']
         """
+        final = [each.upper() for each in self.data if each in "AeEeIiOoUu"]
+        final_set = set(final)
+        return list(final_set)
 
-
-    def pick_odd_numbers(self):
+    @classmethod
+    def pick_odd_numbers(cls):
         """
         Take the string from `self.data` and extract all odd numbers and return
         list of all odd numbers from the string
@@ -97,10 +101,13 @@ class Load(object):
             >> [1, 3, 5]
 
         """
-        # complete code here
+        num = df.pick_numbers()
+        num = [round(i) for i in num]
+        num1 = [i for i in num if i%2 != 0]
+        return num1
 
-
-    def get_mean(self):
+    @classmethod
+    def get_mean(cls):
         """
         Take the string from `self.data` and extract all numbers and return
         the mean of extracted list of numbers.
@@ -113,8 +120,8 @@ class Load(object):
             >> df.get_mean()
             >> 50
         """
-        # complete code here
-
+        num = df.pick_numbers()
+        return sum(num)/len(num)
 
     def get_all_categorical(self):
         """
@@ -130,14 +137,14 @@ class Load(object):
             >> df.get_all_categorical()
             >> ['Series_reference', 'Type']
         """
-        # complete code here
-
-
+        cols = self.df.columns
+        num_cols = self.df._get_numeric_data().columns
+        return list(set(cols) - set(num_cols))
 
     def get_all_continuous(self):
         """
         Take the pandas dataframe from `self.df` and return all
-        the columns which contain categorical variables
+        the columns which contain ccontinuous variables
 
         :returns:   All continuous.
         :rtype:    List
@@ -148,18 +155,18 @@ class Load(object):
             >> df.get_all_continuous()
             >> ['Lower_CI', 'Upper_CI', 'Units']
         """
-        # complete code here
+        num_cols = self.df._get_numeric_data().columns
+        return list(num_cols)
 
-
-
-    def addition(self, x, y):
+    @classmethod
+    def addition(cls, x, y):
         """
         Take X and Y as input and now return the sum of both
 
-        :param      x:    { parameter_description }
-        :type       x:    { type_description }
-        :param      y:    { parameter_description }
-        :type       y:    { type_description }
+        :param      x:    Number
+        :type       x:    Integer
+        :param      y:    Number
+        :type       y:    Integer
 
         Usage:
         ======
@@ -167,10 +174,18 @@ class Load(object):
             >> df.addition(10, 20)
             >> 30
         """
-        # complete code here
+        return x + y
 
 
 
 if __name__ == '__main__':
     # instantiate the object
     df = Load('data.csv')
+    print(df.addition(10, 20))
+    print(df.pick_numbers())
+    print(df.sum_all_numbers())
+    print(df.extract_vowels())
+    print(df.pick_odd_numbers())
+    print(df.get_mean())
+    print(df.get_all_categorical())
+    print(df.get_all_continuous())
